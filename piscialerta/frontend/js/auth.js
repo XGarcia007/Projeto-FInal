@@ -2,9 +2,21 @@ const TOKEN_KEY = 'piscialerta-token';
 const USER_KEY = 'piscialerta-user';
 const NAME_KEY = 'piscialerta-name';
 const ROLE_KEY = 'piscialerta-role';
-const DEFAULT_API_BASE = `${window.location.protocol}//${window.location.hostname || 'localhost'}:3000/api`;
+
+// Deteta se o ambiente é local ou na nuvem (Render)
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const DEFAULT_API_BASE = isLocalhost 
+  ? 'http://localhost:3000/api' 
+  : `${window.location.origin}/api`;
 
 function apiBaseUrl() {
+  const stored = localStorage.getItem('piscialerta-api-base');
+  
+  // Limpa automaticamente a URL com :3000 salva anteriormente no navegador
+  if (stored && !isLocalhost && stored.includes(':3000')) {
+    localStorage.removeItem('piscialerta-api-base');
+  }
+
   return (localStorage.getItem('piscialerta-api-base') || window.PISCIALERTA_API_BASE || DEFAULT_API_BASE)
     .replace(/\/$/, '');
 }

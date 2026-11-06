@@ -1,9 +1,23 @@
 import { getAccessToken, signOut } from './auth.js';
 
-const DEFAULT_API_BASE = `${window.location.protocol}//${window.location.hostname || 'localhost'}:3000/api`;
+// Verifica se está a correr localmente ou no servidor da nuvem (Render)
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+// Em produção no Render usa a origem atual sem a porta :3000
+const DEFAULT_API_BASE = isLocalhost 
+  ? 'http://localhost:3000/api' 
+  : `${window.location.origin}/api`;
+
 const STORAGE_KEY = 'piscialerta-api-base';
 
 export function getApiBaseUrl() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  
+  // Se houver uma URL antiga com :3000 salva no navegador fora do localhost, limpa-a
+  if (stored && !isLocalhost && stored.includes(':3000')) {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
   return (localStorage.getItem(STORAGE_KEY) || window.PISCIALERTA_API_BASE || DEFAULT_API_BASE)
     .replace(/\/$/, '');
 }

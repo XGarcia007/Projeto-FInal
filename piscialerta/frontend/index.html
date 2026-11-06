@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f8fafc">
+    <meta name="description" content="Monitoramento de qualidade da água e energia para piscicultura.">
+    <title>PisciAlerta | Monitoramento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/widgets.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="PisciAlerta, início" data-nav="inicio">
+        <span class="brand-mark"><i data-lucide="waves"></i></span>
+        <span class="brand-name">Pisci<span>Alerta</span></span>
+      </a>
+      <div class="topbar-status">
+        <div class="connection-pill is-offline" id="connection-status" aria-live="polite">
+          <span class="connection-dot"></span><span id="connection-label">Sem conexão</span>
+        </div>
+        <button class="battery-chip" data-nav="bateria" aria-label="Abrir status da bateria">
+          <i data-lucide="battery-medium"></i><span id="header-battery">--%</span>
+        </button>
+      </div>
+      <div class="user-profile" id="user-profile">
+        <img class="user-avatar" id="profile-avatar" src="assets/avatar-owner.svg" alt="">
+        <span class="profile-copy"><strong id="profile-name">Usuário</strong><small id="profile-role">Perfil</small></span>
+        <button class="logout-button" id="logout-button" aria-label="Sair da conta" title="Sair"><i data-lucide="log-out"></i></button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="view is-active" id="view-inicio" aria-labelledby="home-title">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">MONITORAMENTO DE CAMPO <span class="live-indicator"></span></p>
+            <h1 id="home-title">Bom dia, operação.</h1>
+            <p class="muted">Acompanhamento do sistema de piscicultura</p>
+          </div>
+          <label class="tank-select-wrap" for="home-tank-select">
+            <span class="sr-only">Selecionar tanque</span>
+            <i data-lucide="map-pin"></i>
+            <select id="home-tank-select"><option value="tanque-02">Tanque 02</option></select>
+            <i data-lucide="chevron-down"></i>
+          </label>
+        </div>
+
+        <div class="alert-banner" id="critical-banner" role="alert" hidden>
+          <span class="alert-icon"><i data-lucide="triangle-alert"></i></span>
+          <div><strong>Condição crítica detectada</strong><p id="critical-message">Verifique os parâmetros da água.</p></div>
+          <button class="icon-button alert-dismiss" id="dismiss-alert" aria-label="Dispensar aviso"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="section-heading">
+          <div><h2>Triângulo vital</h2><p>Qualidade da água agora</p></div>
+          <span class="updated-label" id="last-updated">Aguardando leitura</span>
+        </div>
+        <div class="metric-grid">
+          <article class="metric-card oxygen-card" id="oxygen-card">
+            <div class="metric-card-top"><span class="metric-icon oxygen-icon"><i data-lucide="wind"></i></span><span class="state-badge state-unknown" id="oxygen-status">Sem leitura</span></div>
+            <p class="metric-label">Oxigênio dissolvido</p>
+            <div class="metric-value-row"><strong id="oxygen-value">--</strong><span>mg/L</span></div>
+            <div class="metric-range"><span>Limite mínimo</span><strong>4,0 mg/L</strong></div>
+            <div class="mini-track"><span id="oxygen-bar"></span></div>
+          </article>
+          <article class="metric-card" id="ph-card">
+            <div class="metric-card-top"><span class="metric-icon ph-icon"><i data-lucide="droplets"></i></span><span class="state-badge state-unknown" id="ph-status">Sem leitura</span></div>
+            <p class="metric-label">pH da água</p>
+            <div class="metric-value-row"><strong id="ph-value">--</strong><span>pH</span></div>
+            <div class="metric-range"><span>Faixa ideal</span><strong>6,5 – 8,5</strong></div>
+            <div class="mini-track"><span id="ph-bar"></span></div>
+          </article>
+          <article class="metric-card" id="ammonia-card">
+            <div class="metric-card-top"><span class="metric-icon ammonia-icon"><i data-lucide="flask-conical"></i></span><span class="state-badge state-unknown" id="ammonia-status">Sem leitura</span></div>
+            <p class="metric-label">Amônia tóxica</p>
+            <div class="metric-value-row"><strong id="ammonia-value">--</strong><span>mg/L</span></div>
+            <div class="metric-range"><span>Limite máximo</span><strong>0,05 mg/L</strong></div>
+            <div class="mini-track"><span id="ammonia-bar"></span></div>
+          </article>
+        </div>
+
+        <div class="home-lower-grid">
+          <article class="panel overview-panel">
+            <div class="panel-heading"><div><h2>Visão do tanque</h2><p>Tanque 02 · Unidade principal</p></div><button class="text-action" data-nav="tanques">Ver detalhes <i data-lucide="arrow-up-right"></i></button></div>
+            <div class="overview-content">
+              <div class="pond-illustration" aria-hidden="true"><div class="pond-ripple ripple-one"></div><div class="pond-ripple ripple-two"></div><i data-lucide="fish"></i><span>02</span></div>
+              <div class="overview-stats"><div><span class="stat-mark safe-mark"></span><span>Aerador principal</span><strong id="main-aerator-state">--</strong></div><div><span class="stat-mark neutral-mark"></span><span>Aerador reserva</span><strong id="backup-aerator-state">--</strong></div><div><span class="stat-mark alert-mark"></span><span>Alarme local</span><strong id="siren-state">--</strong></div></div>
+            </div>
+          </article>
+          <article class="panel battery-summary">
+            <div class="panel-heading"><div><h2>Energia solar</h2><p>Banco de baterias</p></div><span class="panel-icon"><i data-lucide="sun"></i></span></div>
+            <div class="battery-summary-main"><button class="battery-ring" id="battery-ring" aria-label="Abrir detalhes da bateria"><span id="battery-percent">--%</span></button><div><strong id="battery-voltage">-- V</strong><span>Tensão da bateria</span></div></div>
+            <div class="panel-foot"><span>Autonomia estimada</span><strong id="battery-runtime">Não configurada</strong></div>
+            <button class="panel-link" data-nav="bateria">Detalhes da energia <i data-lucide="arrow-right"></i></button>
+          </article>
+        </div>
+        <div class="bottom-spacer"></div>
+      </section>
+
+      <section class="view" id="view-tanques" aria-labelledby="tank-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">UNIDADE PRINCIPAL</p><h1 id="tank-title">Detalhes do tanque</h1><p class="muted">Leituras e acionamentos locais</p></div><label class="tank-select-wrap" for="detail-tank-select"><span class="sr-only">Tanque selecionado</span><i data-lucide="map-pin"></i><select id="detail-tank-select"><option value="tanque-02">Tanque 02</option></select><i data-lucide="chevron-down"></i></label></div>
+        <div class="detail-grid">
+          <article class="panel gauge-panel"><div class="panel-heading"><div><h2>Oxigênio dissolvido</h2><p>Leitura em tempo real</p></div><span class="state-badge state-unknown" id="detail-oxygen-status">Sem leitura</span></div><div class="gauge-wrap"><svg class="oxygen-gauge" viewBox="0 0 240 160" role="img" aria-label="Manômetro de oxigênio"><path class="gauge-track" d="M 34 132 A 86 86 0 0 1 206 132" pathLength="100"></path><path class="gauge-fill" id="oxygen-gauge-fill" d="M 34 132 A 86 86 0 0 1 206 132" pathLength="100"></path></svg><div class="gauge-reading"><strong id="gauge-oxygen-value">--</strong><span>mg/L</span></div></div><div class="gauge-scale"><span>0</span><span>4,0 mínimo</span><span>10</span></div><div class="gauge-note"><i data-lucide="shield-check"></i><span id="oxygen-guidance">Aguardando dados do sensor</span></div></article>
+          <article class="panel controls-panel"><div class="panel-heading"><div><h2>Controle de aeração</h2><p>Comandos protegidos por confirmação</p></div><span class="panel-icon"><i data-lucide="sliders-horizontal"></i></span></div><div class="mode-control"><span>Modo de operação</span><div class="segmented-control" role="group" aria-label="Modo de operação"><button class="mode-button is-selected" data-mode="automatico" aria-pressed="true">Automático</button><button class="mode-button" data-mode="manual" aria-pressed="false">Manual</button></div></div><div class="relay-list"><div class="relay-row"><span class="relay-glyph"><i data-lucide="fan"></i></span><div><strong>Aerador principal</strong><small id="main-relay-description">Estado desconhecido</small></div><button class="relay-action" data-relay-pin="26" data-relay-label="Aerador principal" disabled aria-label="Acionar aerador principal"><i data-lucide="power"></i></button></div><div class="relay-row"><span class="relay-glyph"><i data-lucide="fan"></i></span><div><strong>Aerador reserva</strong><small id="backup-relay-description">Estado desconhecido</small></div><button class="relay-action" data-relay-pin="27" data-relay-label="Aerador reserva" disabled aria-label="Acionar aerador reserva"><i data-lucide="power"></i></button></div></div><p class="control-footnote" id="manual-control-note">Selecione o modo manual para habilitar comandos.</p></article>
+        </div>
+        <article class="panel tank-readings-panel"><div class="panel-heading"><div><h2>Parâmetros complementares</h2><p>Última amostra recebida</p></div><span class="updated-label" id="tank-updated">--</span></div><div class="reading-list"><div><span class="reading-symbol ph-icon"><i data-lucide="droplets"></i></span><span>pH</span><strong id="detail-ph-value">--</strong><span id="detail-ph-status" class="state-badge state-unknown">--</span></div><div><span class="reading-symbol ammonia-icon"><i data-lucide="flask-conical"></i></span><span>Amônia</span><strong id="detail-ammonia-value">-- mg/L</strong><span id="detail-ammonia-status" class="state-badge state-unknown">--</span></div></div></article>
+        <div class="bottom-spacer"></div>
+      </section>
+
+      <section class="view" id="view-bateria" aria-labelledby="battery-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">SISTEMA OFF-GRID</p><h1 id="battery-title">Energia solar</h1><p class="muted">Banco de baterias e geração</p></div><span class="panel-icon sun-large"><i data-lucide="sun"></i></span></div>
+        <article class="panel battery-main-panel"><div class="battery-main-top"><div><p class="eyebrow">CARGA ESTIMADA</p><strong id="battery-large-percent">--<small>%</small></strong><span id="battery-estimate-note">Aguardando leitura de tensão</span></div><div class="battery-visual" id="battery-visual"><div class="battery-terminal"></div><div class="battery-fill" id="battery-fill"></div><i data-lucide="zap"></i></div></div><div class="battery-scale"><span>Baixa</span><div class="battery-scale-track"><span id="battery-scale-fill"></span></div><span>Cheia</span></div></article>
+        <div class="energy-grid"><article class="panel energy-stat"><span class="metric-icon ph-icon"><i data-lucide="battery-charging"></i></span><span>Tensão da bateria</span><strong id="battery-detail-voltage">-- V</strong><small>Valor medido pelo ESP32</small></article><article class="panel energy-stat"><span class="metric-icon oxygen-icon"><i data-lucide="solar-panel"></i></span><span>Tensão do painel solar</span><strong id="panel-voltage">-- V</strong><small>Sensor dedicado não informado</small></article><article class="panel energy-stat"><span class="metric-icon ammonia-icon"><i data-lucide="clock-3"></i></span><span>Autonomia estimada</span><strong id="battery-detail-runtime">Não configurada</strong><small>Requer capacidade e consumo do sistema</small></article></div>
+        <div class="notice-strip"><i data-lucide="info"></i><p>A carga percentual é uma estimativa configurável baseada na tensão. Para maior precisão, calibre conforme a química e o número de células do banco instalado.</p></div>
+        <div class="bottom-spacer"></div>
+      </section>
+
+      <section class="view" id="view-graficos" aria-labelledby="charts-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">TENDÊNCIA DA ÁGUA</p><h1 id="charts-title">Histórico</h1><p class="muted">Oxigênio dissolvido ao longo do tempo</p></div><span class="chart-current"><i class="chart-dot"></i><span><strong id="chart-current-value">--</strong> mg/L agora</span></span></div>
+        <article class="panel chart-panel"><div class="panel-heading chart-heading"><div><h2>Oxigênio dissolvido</h2><p>Limite crítico: 4,0 mg/L</p></div><div class="period-control" role="group" aria-label="Período do gráfico"><button class="period-button is-selected" data-period="24h" aria-pressed="true">24h</button><button class="period-button" data-period="7d" aria-pressed="false">7 dias</button><button class="period-button" data-period="30d" aria-pressed="false">30 dias</button></div></div><div class="chart-legend"><span><i class="legend-line oxygen-legend"></i>Oxigênio (mg/L)</span><span><i class="legend-line limit-legend"></i>Limite crítico</span></div><div class="chart-canvas-wrap"><canvas id="oxygen-chart" aria-label="Gráfico de oxigênio dissolvido e limite crítico"></canvas><div class="chart-empty" id="chart-empty">Aguardando leituras para montar o histórico.</div></div></article>
+        <div class="bottom-spacer"></div>
+      </section>
+
+      <section class="view" id="view-ajustes" aria-labelledby="settings-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">CONFIGURAÇÃO</p><h1 id="settings-title">Ajustes</h1><p class="muted">Conexão com a unidade PisciAlerta</p></div><span class="panel-icon"><i data-lucide="settings-2"></i></span></div>
+        <article class="panel settings-panel"><div class="panel-heading"><div><h2>API do dispositivo</h2><p>Endereço do backend de telemetria</p></div><span class="setting-status" id="api-setting-status">Não verificado</span></div><label class="field-label" for="api-base-input">Endereço base da API</label><div class="api-input-row"><input id="api-base-input" type="url" inputmode="url" placeholder="http://192.168.1.100:3000/api"><button class="primary-button" id="save-api-button"><i data-lucide="save"></i>Salvar</button></div><p class="field-hint">O endereço deve terminar em <code>/api</code>. As leituras são atualizadas automaticamente a cada 10 segundos.</p><div class="settings-divider"></div><div class="settings-info-row"><span>Estado da conexão</span><strong id="settings-connection">Sem conexão</strong></div><div class="settings-info-row"><span>Última leitura</span><strong id="settings-last-reading">Nenhuma</strong></div><button class="secondary-button" id="refresh-now-button"><i data-lucide="refresh-cw"></i>Atualizar agora</button></article>
+        <div class="bottom-spacer"></div>
+      </section>
+
+      <section class="view" id="view-usuarios" aria-labelledby="users-title" hidden>
+        <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1 id="users-title">Gestão de Usuários</h1><p class="muted">Acessos e perfis cadastrados no PisciAlerta</p></div><span class="panel-icon"><i data-lucide="users-round"></i></span></div>
+        <div class="user-management-grid">
+          <article class="panel user-form-panel">
+            <div class="panel-heading"><div><h2>Novo acesso</h2><p>Cadastre uma conta para a equipe</p></div></div>
+            <form id="user-create-form">
+              <label class="field-label" for="user-name">Nome completo</label>
+              <input class="user-field" id="user-name" name="nome" type="text" autocomplete="name" maxlength="120" required>
+              <label class="field-label" for="user-email">E-mail</label>
+              <input class="user-field" id="user-email" name="email" type="email" autocomplete="email" required>
+              <label class="field-label" for="user-password">Senha</label>
+              <input class="user-field" id="user-password" name="senha" type="password" autocomplete="new-password" minlength="8" required>
+              <label class="field-label" for="user-role">Perfil</label>
+              <select class="user-field" id="user-role" name="role" required><option value="OPERADOR">Manejador / Operador</option><option value="ADMIN">Administrador</option></select>
+              <p class="user-form-message" id="user-form-message" role="alert" hidden></p>
+              <button class="user-submit" id="user-submit" type="submit"><i data-lucide="user-round-plus"></i>Cadastrar Novo Usuário</button>
+            </form>
+          </article>
+          <article class="panel user-list-panel">
+            <div class="panel-heading"><div><h2>Usuários cadastrados</h2><p>Contas com acesso ao sistema</p></div><span class="user-count" id="user-count">0</span></div>
+            <div class="user-table-wrap">
+              <table class="user-table">
+                <thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th><span class="sr-only">Ação</span></th></tr></thead>
+                <tbody id="user-table-body"><tr><td class="user-table-state" colspan="4">Carregando usuários...</td></tr></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+        <div class="bottom-spacer"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <button class="nav-item is-active" data-nav="inicio" aria-current="page"><i data-lucide="layout-dashboard"></i><span>Início</span></button>
+      <button class="nav-item" data-nav="tanques"><i data-lucide="fish"></i><span>Tanques</span></button>
+      <button class="nav-item" data-nav="bateria"><i data-lucide="battery-charging"></i><span>Bateria</span></button>
+      <button class="nav-item" data-nav="graficos"><i data-lucide="chart-no-axes-combined"></i><span>Gráficos</span></button>
+      <button class="nav-item" data-nav="ajustes"><i data-lucide="settings-2"></i><span>Ajustes</span></button>
+      <button class="nav-item" id="users-nav" data-nav="usuarios" hidden><i data-lucide="users-round"></i><span>Usuários</span></button>
+    </nav>
+
+    <dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="dialog-title">
+      <form method="dialog" class="dialog-dismiss-form"><button class="icon-button" aria-label="Fechar confirmação"><i data-lucide="x"></i></button></form>
+      <span class="dialog-alert-icon"><i data-lucide="shield-alert"></i></span>
+      <p class="eyebrow">CONFIRMAÇÃO DE SEGURANÇA</p>
+      <h2 id="dialog-title">Acionar equipamento?</h2>
+      <p class="dialog-copy" id="dialog-copy">Confirme o comando para o tanque selecionado.</p>
+      <div class="dialog-step" id="dialog-step">Etapa 1 de 2 <span></span></div>
+      <div class="dialog-actions"><button class="secondary-button" id="cancel-command">Cancelar</button><button class="primary-button" id="confirm-command">Entendi, continuar</button></div>
+    </dialog>
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

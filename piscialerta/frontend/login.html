@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f2f8f6">
+    <title>Acesso | PisciAlerta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+  </head>
+  <body class="login-page">
+    <main class="login-layout">
+      <section class="login-side" aria-label="PisciAlerta">
+        <a class="brand login-brand" href="index.html">
+          <span class="brand-mark"><i data-lucide="waves"></i></span>
+          <span class="brand-name">Pisci<span>Alerta</span></span>
+        </a>
+        <div class="login-water-art" aria-hidden="true">
+          <div class="water-line water-line-one"></div><div class="water-line water-line-two"></div><div class="water-line water-line-three"></div>
+          <span class="water-fish"><i data-lucide="fish"></i></span>
+          <span class="water-reading"><i data-lucide="activity"></i> ÁGUA EM EQUILÍBRIO</span>
+        </div>
+        <p class="login-side-caption">PisciAlerta <span>/</span> Painel de operação</p>
+      </section>
+
+      <section class="login-main">
+        <div class="login-card">
+          <div class="login-heading">
+            <p class="eyebrow">ÁREA RESTRITA</p>
+            <h1>Acesse sua operação</h1>
+            <p>Entre com seu perfil para acompanhar os tanques.</p>
+          </div>
+          <form id="login-form" novalidate>
+            <label for="email">E-mail</label>
+            <div class="login-input-wrap"><i data-lucide="mail"></i><input id="email" name="email" type="email" autocomplete="username" placeholder="nome@piscialerta.com" required></div>
+            <label for="password">Senha</label>
+            <div class="login-input-wrap"><i data-lucide="key-round"></i><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Sua senha" required><button class="password-toggle" id="password-toggle" type="button" aria-label="Mostrar senha"><i data-lucide="eye"></i></button></div>
+            <p class="login-error" id="login-error" role="alert" aria-live="assertive" aria-atomic="true" hidden></p>
+            <button class="login-submit" id="login-submit" type="submit"><span>Entrar no painel</span><i data-lucide="arrow-right"></i></button>
+          </form>
+          <div class="biometric-divider"><span>ou acesse com biometria</span></div>
+          <div class="biometric-actions">
+            <button class="biometric-button" type="button" data-biometric="face"><i data-lucide="scan-face"></i><span>Face ID</span></button>
+            <button class="biometric-button" type="button" data-biometric="fingerprint"><i data-lucide="fingerprint"></i><span>Impressão digital</span></button>
+          </div>
+          <p class="biometric-hint" id="biometric-hint" aria-live="polite">Biometria demonstrativa requer configuração de passkey.</p>
+          <details class="demo-access"><summary>Acessos de demonstração</summary><div><span>Proprietário</span><code>admin@piscialerta.com</code><code>senha123</code></div><div><span>Operador</span><code>operador@piscialerta.com</code><code>senha123</code></div></details>
+        </div>
+        <p class="login-footer">PisciAlerta <span>·</span> Ambiente de demonstração</p>
+      </section>
+    </main>
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="module" src="js/login-page.js"></script>
+  </body>
+</html>

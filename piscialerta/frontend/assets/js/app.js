@@ -1,0 +1,1 @@
+// Inicialização da interface será implementada na Etapa 4.
